@@ -420,9 +420,6 @@ post_est<-function(eig,pseq,tol){
 }
 
 
-
-
-
 FN_block<-function(eig,v,pseq,tol){
   
   I=length(pseq)
@@ -614,6 +611,47 @@ standardizeX <- function(X, pvec, center = F){
   return(list(X = X, svec = svec, norms = norms, Xmean = Xmean))
 }
 
+SQM <- function(eigenvalue, p, n, alpha=0.2, beta = 0.1){
+  
+  l <- eigenvalue
+  gamma=min(p,n)/max(p,n)
+  k=floor(min(p,n)*alpha):floor(min(p,n)*(1-alpha))
+  predictor=qmp(k/min(p,n),max(n,p),min(n,p))*max(p,n)/n
+  
+  sigma2hat=lm(rev(l[k])~predictor-1)$coef[[1]]
+
+  k0=min(p,n):1
+
+  cutoff=(sigma2hat*((1+sqrt(gamma))^2+qtw(0.9)*max(p,n)^(-2/3)*gamma^(-1/6)*(1+sqrt(gamma))^(4/3)))*max(p,n)/n
+  K=sum(l>cutoff)
+  return(list(K=K,sigma2=sigma2hat))
+}
+
+GenerateRho3<-function(Sj,n_rho0,q=0.95,minv=1e-10,maxv=NULL,skew=NULL){
+  #nsol: number of grids
+  p=dim(Sj)[1]
+  
+  diag(Sj)=rep(NA,p)
+  
+  
+  if(is.null(maxv)){
+    maxv= as.numeric(quantile(as.numeric(na.omit(abs(c(Sj)))),q))
+  }
+  
+  #generate mixing parameter sequence
+  step=1/(n_rho0-1)
+  # if(is.null(skew)){
+  #   skew=1
+  # }
+  
+  mixseq=unlist(sapply(seq(from=0,to=1,by=step),FUN=function(u){
+    log(minv)+u*(log(maxv)-log(minv))
+  }))
+  
+  rho0seq = exp(mixseq)
+  
+  return(rho0seq)
+}
 
 
 
