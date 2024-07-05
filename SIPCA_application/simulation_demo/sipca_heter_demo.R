@@ -1,4 +1,4 @@
-setwd('/code_revised')
+setwd('/SIPCA_functions')
 
 
 library(MASS)
