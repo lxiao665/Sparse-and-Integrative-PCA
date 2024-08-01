@@ -24,7 +24,7 @@ sourceCpp('MatrixMtp.cpp')
 # I: number of blocks
 I=10
 # p0: dimension of each block
-p0=50
+p0=20
 pseq=rep(p0,I)       #[P1,P2,...PI]
 pcum <- cumsum(pseq)
 pcum_ex <- c(0, pcum)
@@ -35,7 +35,7 @@ lambda1=40
 lambda2=20
 
 # n: sample size
-n=200
+n=100
 
 #index of nonzero data blocks for the first two eigenvectors
 Jv1<-1:3
@@ -85,9 +85,9 @@ eps_cv=1e-2
 eps_est=1e-3
 
 # cross validation
-fold=5
+fold=3
 n_alpha=5
-n_rho0=10
+n_rho0=6
 
 
 ##################### Estimate sparse eigenvectors #########################
